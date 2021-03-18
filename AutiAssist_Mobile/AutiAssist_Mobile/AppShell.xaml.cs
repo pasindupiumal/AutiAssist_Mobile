@@ -14,6 +14,8 @@ namespace AutiAssist_Mobile
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
+
+            BrowseFlyout.CurrentItem = BrowseTab;
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
