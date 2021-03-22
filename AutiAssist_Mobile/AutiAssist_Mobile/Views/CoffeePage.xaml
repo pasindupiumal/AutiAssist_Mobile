@@ -10,10 +10,20 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <ListView 
+            ItemSelected="ListView_ItemSelected"
+            ItemTapped="ListView_ItemTapped"
+            CachingStrategy="RecycleElement"
             BackgroundColor="Transparent"
             HasUnevenRows="True"
-            SeparatorVisibility="None"
-            ItemsSource="{Binding Coffee}">
+            SeparatorVisibility="Default"
+            SeparatorColor="Transparent"
+            IsPullToRefreshEnabled="True"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            RefreshCommand="{Binding RefreshCommand}"
+            RefreshControlColor="Green"
+            ItemsSource="{Binding CoffeeGroups}"
+            GroupDisplayBinding="{Binding Key}"
+            IsGroupingEnabled="True">
             <ListView.Header>
                 <StackLayout Padding="20">
                     <Label Text="HEADER" HorizontalOptions="Center"/>
@@ -27,6 +37,10 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Coffee">
                     <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Favourite" Clicked="MenuItem_Clicked"/>
+                            <MenuItem Text="Delete"/>
+                        </ViewCell.ContextActions>
                         <Grid Padding="10">
                             <Frame CornerRadius="20"
                                    HasShadow="True">
