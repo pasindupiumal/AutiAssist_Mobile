@@ -15,23 +15,14 @@ namespace AutiAssist_Mobile.ViewModels
         public ObservableRangeCollection<Grouping<string, Coffee>> CoffeeGroups { get; set; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand<Coffee> FavouriteCommand { get; }
+        public AsyncCommand<object> SelectedCommand { get; }
 
         Coffee selectedCoffee;
 
         public Coffee SelectedCoffee
         {
             get => selectedCoffee;
-            set
-            {
-                if(value != null)
-                {
-                    Application.Current.MainPage.DisplayAlert("Selected", value.Name, "OK");
-                    value = null;
-                }
-
-                selectedCoffee = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref selectedCoffee, value);
         }
 
         public CoffeeViewModel()
@@ -42,6 +33,7 @@ namespace AutiAssist_Mobile.ViewModels
             CoffeeGroups = new ObservableRangeCollection<Grouping<string, Coffee>>();
             RefreshCommand = new AsyncCommand(Refresh);
             FavouriteCommand = new AsyncCommand<Coffee>(Favourite);
+            SelectedCommand = new AsyncCommand<object>(Selected);
 
             var image = "https://www.yesplz.coffee/app/uploads/2020/11/emptybag-min.png";
 
@@ -76,10 +68,28 @@ namespace AutiAssist_Mobile.ViewModels
 
             IsBusy = false;
         }
+        async Task Selected(object args)
+        {
+            var coffee = args as Coffee;
+
+            if (coffee == null)
+            {
+                return;
+            }
+
+            SelectedCoffee = null;
+
+            await Application.Current.MainPage.DisplayAlert("Coffee Selected", coffee.Name, "OK");
+        }
 
         async Task Favourite(Coffee coffee)
         {
-            await Application.Current.MainPage.DisplayAlert("Coffee Favourited", "HELLO, WORLD", "OK");
+            if(Coffee == null)
+            {
+                return;
+            }
+
+            await Application.Current.MainPage.DisplayAlert("Coffee Favourited", coffee.Name, "OK");
         }
 
     }

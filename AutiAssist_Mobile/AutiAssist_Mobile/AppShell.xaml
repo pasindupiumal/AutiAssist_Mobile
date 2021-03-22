@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:local="clr-namespace:AutiAssist_Mobile.Views"
-       Title="AutiAssist_Mobile"
-       x:Class="AutiAssist_Mobile.AppShell">
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AutiAssist_Mobile.AppShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:AutiAssist_Mobile.Views"
+    Title="AutiAssist_Mobile">
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.
-    
+        
         https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
     -->
 
@@ -20,23 +21,26 @@
                 <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
                 <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
                 <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.TabBarForegroundColor" Value="White"/>
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
-                <Setter Property="Shell.TabBarTitleColor" Value="White"/>
+                <Setter Property="Shell.TabBarForegroundColor" Value="White" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.TabBarTitleColor" Value="White" />
             </Style>
-            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
-            <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
 
             <!--
-            Default Styles for all Flyout Items
-            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
+                Default Styles for all Flyout Items
+                https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
             -->
             <Style Class="FlyoutItemLabelStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="TextColor" Value="White" />
             </Style>
-         
-            <Style Class="FlyoutItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
-                <Setter Property="BackgroundColor" Value="LightBlue"></Setter>
+
+            <Style
+                ApplyToDerivedTypes="True"
+                Class="FlyoutItemLayoutStyle"
+                TargetType="Layout">
+                <Setter Property="BackgroundColor" Value="LightBlue" />
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -57,9 +61,12 @@
             </Style>
 
             <!--
-            Custom Style you can apply to any Flyout Item
+                Custom Style you can apply to any Flyout Item
             -->
-            <Style Class="MenuItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
+            <Style
+                ApplyToDerivedTypes="True"
+                Class="MenuItemLayoutStyle"
+                TargetType="Layout">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -75,73 +82,94 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <!-- 
+    <!--
         When the Flyout is visible this defines the content to display in the flyout.
-        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
+        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
 
-    <FlyoutItem IsVisible="False">
-        <ShellContent Route="LoadingPage"
-                      Shell.FlyoutBehavior="Disabled"
-                      ContentTemplate="{DataTemplate local:LoadingPage}" />
+    <FlyoutItem FlyoutItemIsVisible="False">
+        <ShellContent
+            ContentTemplate="{DataTemplate local:LoadingPage}"
+            Route="LoadingPage"
+            Shell.FlyoutBehavior="Disabled" />
     </FlyoutItem>
 
-    <FlyoutItem IsVisible="False">
-        <ShellContent Route="LoginPage"
-                      Shell.FlyoutBehavior="Disabled"
-                      ContentTemplate="{DataTemplate local:LoginPage}" />
+    <FlyoutItem FlyoutItemIsVisible="False">
+        <ShellContent
+            ContentTemplate="{DataTemplate local:LoginPage}"
+            Route="LoginPage"
+            Shell.FlyoutBehavior="Disabled" />
     </FlyoutItem>
 
-    <FlyoutItem IsVisible="False">
-        <ShellContent Route="RegisterPage"
-                      Shell.FlyoutBehavior="Disabled"
-                      ContentTemplate="{DataTemplate local:RegisterPage}" />
+    <FlyoutItem FlyoutItemIsVisible="False">
+        <ShellContent
+            ContentTemplate="{DataTemplate local:RegisterPage}"
+            Route="RegisterPage"
+            Shell.FlyoutBehavior="Disabled" />
     </FlyoutItem>
+
 
     <FlyoutItem Title="About" Icon="icon_about.png">
         <Tab Title="About" Icon="icon_about.png">
-            <ShellContent Title="About" Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
-            <ShellContent Title="Test1" Route="Test1" ContentTemplate="{DataTemplate local:Test1}" />
-            <ShellContent Title="Test2" Route="Test2" ContentTemplate="{DataTemplate local:Test2}" />
-            <ShellContent Title="Test3" Route="Test3" ContentTemplate="{DataTemplate local:Test3}" />
+            <ShellContent
+                Title="About"
+                ContentTemplate="{DataTemplate local:AboutPage}"
+                Route="AboutPage" />
+            <ShellContent
+                Title="Test1"
+                ContentTemplate="{DataTemplate local:Test1}"
+                Route="Test1" />
+            <ShellContent
+                Title="Test2"
+                ContentTemplate="{DataTemplate local:Test2}"
+                Route="Test2" />
+            <ShellContent
+                Title="Test3"
+                ContentTemplate="{DataTemplate local:Test3}"
+                Route="Test3" />
         </Tab>
         <Tab Title="Browse" Icon="icon_feed.png">
-            <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" Route="ItemsPage" />
         </Tab>
     </FlyoutItem>
-    
-    <FlyoutItem x:Name="BrowseFlyout" Title="Browse" Icon="icon_feed.png">
+
+    <FlyoutItem
+        x:Name="BrowseFlyout"
+        Title="Browse"
+        Icon="icon_feed.png">
         <Tab Title="About" Icon="icon_about.png">
             <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" />
         </Tab>
-        <Tab x:Name="BrowseTab" Title="Browse" Icon="icon_feed.png">
+        <Tab
+            x:Name="BrowseTab"
+            Title="Browse"
+            Icon="icon_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:ItemsPage}" />
         </Tab>
     </FlyoutItem>
 
     <FlyoutItem Title="Cofees">
-        <ShellContent Route="CoffeePage" ContentTemplate="{DataTemplate local:CoffeePage}"/>
+        <ShellContent ContentTemplate="{DataTemplate local:CoffeePage}" Route="CoffeePage" />
     </FlyoutItem>
 
-    <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
-    <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
-        
-    </MenuItem>
+    <!--  When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
+    <MenuItem
+        Clicked="OnMenuItemClicked"
+        StyleClass="MenuItemLayoutStyle"
+        Text="Logout" />
 
     <!--
         TabBar lets you define content that won't show up in a flyout menu. When this content is active
-        the flyout menu won't be available. This is useful for creating areas of the application where 
-        you don't want users to be able to navigate away from. If you would like to navigate to this 
-        content you can do so by calling 
+        the flyout menu won't be available. This is useful for creating areas of the application where
+        you don't want users to be able to navigate away from. If you would like to navigate to this
+        content you can do so by calling
         await Shell.Current.GoToAsync("//LoginPage");
     -->
+    <TabBar />
 
-    <TabBar>
-        
-    </TabBar>
-    
-    <!-- Optional Templates 
+
+    <!-- Optional Templates
     // These may be provided inline as below or as separate classes.
 
     // This header appears at the top of the Flyout.
