@@ -4,7 +4,8 @@
              xmlns:viewmodel="clr-namespace:AutiAssist_Mobile.ViewModels" 
              xmlns:model="clr-namespace:AutiAssist_Mobile.Models"
              x:Class="AutiAssist_Mobile.Views.CoffeePage"
-             x:DataType="viewmodel:CoffeeViewModel">
+             x:DataType="viewmodel:CoffeeViewModel"
+             x:Name="PageOfCoffee">
     <ContentPage.BindingContext>
         <viewmodel:CoffeeViewModel/>
     </ContentPage.BindingContext>
@@ -37,7 +38,11 @@
                 <DataTemplate x:DataType="model:Coffee">
                     <ViewCell>
                         <ViewCell.ContextActions>
-                            <MenuItem Text="Favourite" Clicked="MenuItem_Clicked"/>
+                            <MenuItem Text="Favourite" 
+                                      Command="{Binding Source={x:Reference PageOfCoffee},
+                                Path=BindingContext.FavouriteCommand}"
+                                      CommandParameter="{Binding .}"
+                                      />
                             <MenuItem Text="Delete"/>
                         </ViewCell.ContextActions>
                         <Grid Padding="10">

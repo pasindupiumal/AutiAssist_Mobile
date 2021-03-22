@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutiAssist_Mobile.Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Xamarin.Forms;
 
 namespace AutiAssist_Mobile.ViewModels
 {
@@ -13,6 +14,25 @@ namespace AutiAssist_Mobile.ViewModels
         public ObservableRangeCollection<Coffee> Coffee { get; set; }
         public ObservableRangeCollection<Grouping<string, Coffee>> CoffeeGroups { get; set; }
         public AsyncCommand RefreshCommand { get; }
+        public AsyncCommand<Coffee> FavouriteCommand { get; }
+
+        Coffee selectedCoffee;
+
+        public Coffee SelectedCoffee
+        {
+            get => selectedCoffee;
+            set
+            {
+                if(value != null)
+                {
+                    Application.Current.MainPage.DisplayAlert("Selected", value.Name, "OK");
+                    value = null;
+                }
+
+                selectedCoffee = value;
+                OnPropertyChanged();
+            }
+        }
 
         public CoffeeViewModel()
         {
@@ -21,6 +41,7 @@ namespace AutiAssist_Mobile.ViewModels
             Coffee = new ObservableRangeCollection<Coffee>();
             CoffeeGroups = new ObservableRangeCollection<Grouping<string, Coffee>>();
             RefreshCommand = new AsyncCommand(Refresh);
+            FavouriteCommand = new AsyncCommand<Coffee>(Favourite);
 
             var image = "https://www.yesplz.coffee/app/uploads/2020/11/emptybag-min.png";
 
@@ -46,6 +67,7 @@ namespace AutiAssist_Mobile.ViewModels
             CoffeeGroups.Add(new Grouping<string, Coffee>("Yes Plz", new[] { Coffee[5] }));
         }
 
+
         async Task Refresh()
         {
             IsBusy = true;
@@ -53,6 +75,11 @@ namespace AutiAssist_Mobile.ViewModels
             await Task.Delay(2000);
 
             IsBusy = false;
+        }
+
+        async Task Favourite(Coffee coffee)
+        {
+            await Application.Current.MainPage.DisplayAlert("Coffee Favourited", "HELLO, WORLD", "OK");
         }
 
     }
