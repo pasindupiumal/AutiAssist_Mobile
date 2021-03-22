@@ -1,27 +1,34 @@
 ﻿using AutiAssist_Mobile.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace AutiAssist_Mobile.ViewModels
 {
-    [QueryProperty(nameof(RandomNumber), nameof(RandomNumber))]
     public class LoginViewModel : BaseViewModel
     {
-        string randomNumber;
+        private string email;
+        private string password;
 
         public LoginViewModel()
         {
             LoginCommand = new Command(OnLoginClicked);
             RegisterCommand = new Command(OnRegisterClicked);
         }
-
-        public string RandomNumber
+        
+        public string Email
         {
-            get => randomNumber;
+            get => email;
+            set => SetProperty(ref email, value);
+        }
 
-            set => SetProperty(ref randomNumber, value);
+        public string Password
+        {
+            get => password;
+            set => SetProperty(ref password, value);
         }
         public Command LoginCommand { get; }
 
@@ -30,8 +37,27 @@ namespace AutiAssist_Mobile.ViewModels
         
         private async void OnLoginClicked(object obj)
         {
-            // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-            await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            if(IsBusy)
+            {
+                return;
+            }
+
+            try
+            {
+                IsBusy = true;
+
+                await Task.Delay(2000);
+                await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Authentication error: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Error!", ex.Message, "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async void OnRegisterClicked(object obj)

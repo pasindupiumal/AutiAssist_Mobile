@@ -18,8 +18,6 @@ namespace AutiAssist_Mobile.ViewModels
 
         public async Task Authenticate()
         {
-            Random random = new Random();
-
             string number = "1";
 
             if (int.Parse(number) == 1)
@@ -27,7 +25,7 @@ namespace AutiAssist_Mobile.ViewModels
                 await Task.Delay(3000);
 
                 //await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
-                await Shell.Current.GoToAsync($"//{nameof(LoginPage)}?{nameof(LoginViewModel.RandomNumber)}={number}");
+                await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }
             else
             {

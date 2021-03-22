@@ -11,10 +11,19 @@ namespace AutiAssist_Mobile
         public AppShell()
         {
             InitializeComponent();
+            RegisterRoutes();
+            InitializeDefaultViews();
+        }
+
+        private void RegisterRoutes()
+        {
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
+        }
 
+        private void InitializeDefaultViews()
+        {
             BrowseFlyout.CurrentItem = BrowseTab;
         }
 

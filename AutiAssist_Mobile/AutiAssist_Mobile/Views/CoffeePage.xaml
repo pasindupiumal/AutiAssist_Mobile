@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodel="clr-namespace:AutiAssist_Mobile.ViewModels" 
+             xmlns:model="clr-namespace:AutiAssist_Mobile.Models"
+             x:Class="AutiAssist_Mobile.Views.CoffeePage"
+             x:DataType="viewmodel:CoffeeViewModel">
+    <ContentPage.BindingContext>
+        <viewmodel:CoffeeViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ListView 
+            BackgroundColor="Transparent"
+            HasUnevenRows="True"
+            SeparatorVisibility="None"
+            ItemsSource="{Binding Coffee}">
+            <ListView.Header>
+                <StackLayout Padding="20">
+                    <Label Text="HEADER" HorizontalOptions="Center"/>
+                </StackLayout>
+            </ListView.Header>
+            <ListView.Footer>
+                <StackLayout Padding="20">
+                    <Label Text="FOOTER" HorizontalOptions="Center"/>
+                </StackLayout>
+            </ListView.Footer>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:Coffee">
+                    <ViewCell>
+                        <Grid Padding="10">
+                            <Frame CornerRadius="20"
+                                   HasShadow="True">
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding Image}"
+                                           WidthRequest="50"/>
+                                    <StackLayout VerticalOptions="Center">
+                                        <Label VerticalOptions="Center"
+                                               FontSize="Large"
+                                               Text="{Binding Name}"/>
+                                        <Label VerticalOptions="Center"
+                                               FontSize="Large"
+                                               Text="{Binding Roaster}"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>
