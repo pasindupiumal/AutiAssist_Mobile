@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using AutiAssist_Mobile.Models;
@@ -18,6 +19,7 @@ namespace AutiAssist_Mobile.ViewModels
         public AsyncCommand<object> SelectedCommand { get; }
 
         Coffee selectedCoffee;
+        bool initialLoad = false;
 
         public Coffee SelectedCoffee
         {
@@ -28,37 +30,21 @@ namespace AutiAssist_Mobile.ViewModels
         public CoffeeViewModel()
         {
             Title = "Coffees ListView";
-
             Coffee = new ObservableRangeCollection<Coffee>();
             CoffeeGroups = new ObservableRangeCollection<Grouping<string, Coffee>>();
             RefreshCommand = new AsyncCommand(Refresh);
             FavouriteCommand = new AsyncCommand<Coffee>(Favourite);
             SelectedCommand = new AsyncCommand<object>(Selected);
-
-            var image = "https://www.yesplz.coffee/app/uploads/2020/11/emptybag-min.png";
-
-            Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Sip of Sunshine", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Potent Potable", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-
-            CoffeeGroups.Add(new Grouping<string, Coffee>("Blue Bottle", new[] { Coffee[2] }));
-            CoffeeGroups.Add(new Grouping<string, Coffee>("Yes Plz", new[] { Coffee[5] }));
+            
         }
 
+        public bool InitialLoad
+        {
+            get { return initialLoad; }
+            set { SetProperty(ref initialLoad, value); OnPropertyChanged(nameof(IsNotInitialLoad)); }
+        }
+
+        public bool IsNotInitialLoad => !InitialLoad;
 
         async Task Refresh()
         {
@@ -90,6 +76,56 @@ namespace AutiAssist_Mobile.ViewModels
             }
 
             await Application.Current.MainPage.DisplayAlert("Coffee Favourited", coffee.Name, "OK");
+        }
+
+        public async Task GetCoffees()
+        {
+            if (IsBusy)
+            {
+                return;
+            }
+
+            try
+            {
+                InitialLoad = true;
+
+                await Task.Delay(4000);
+
+                var image = "https://www.yesplz.coffee/app/uploads/2020/11/emptybag-min.png";
+
+                Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Sip of Sunshine", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Potent Potable", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+
+                CoffeeGroups.Add(new Grouping<string, Coffee>("Blue Bottle", new[] { Coffee[2] }));
+                CoffeeGroups.Add(new Grouping<string, Coffee>("Yes Plz", new[] { Coffee[5] }));
+
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Unable to get coffees: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Error!", ex.Message, "OK");
+            }
+            finally
+            {
+                InitialLoad = false;
+                IsBusy = false;
+
+            }
         }
 
     }

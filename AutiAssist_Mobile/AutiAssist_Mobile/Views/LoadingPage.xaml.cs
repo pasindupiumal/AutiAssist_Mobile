@@ -13,19 +13,19 @@ namespace AutiAssist_Mobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoadingPage : ContentPage
     {
-        LoadingViewModel viewModel;
+        LoadingViewModel loadingViewModel;
         public LoadingPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new LoadingViewModel();
+            BindingContext = loadingViewModel = new LoadingViewModel();
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
 
-            await viewModel.Authenticate();
+            await loadingViewModel.Authenticate();
         }
     }
 }
