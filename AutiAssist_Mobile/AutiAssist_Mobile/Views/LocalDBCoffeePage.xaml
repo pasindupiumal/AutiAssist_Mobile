@@ -67,7 +67,10 @@
                                     Command="{Binding Source={x:Reference PageOfLocalDBCoffee}, Path=BindingContext.FavouriteCommand}"
                                     CommandParameter="{Binding .}"
                                     Text="Favourite" />
-                                <MenuItem Text="Delete" />
+                                <MenuItem
+                                    Command="{Binding Source={x:Reference PageOfLocalDBCoffee}, Path=BindingContext.RemoveCommand}"
+                                    CommandParameter="{Binding .}"
+                                    Text="Delete" />
                             </ViewCell.ContextActions>
                             <Grid Padding="10">
                                 <Frame CornerRadius="20" HasShadow="True">
@@ -81,6 +84,10 @@
                                             <Label
                                                 FontSize="Large"
                                                 Text="{Binding Roaster}"
+                                                VerticalOptions="Center" />
+                                            <Label
+                                                FontSize="Small"
+                                                Text="{Binding Id}"
                                                 VerticalOptions="Center" />
                                         </StackLayout>
                                     </StackLayout>

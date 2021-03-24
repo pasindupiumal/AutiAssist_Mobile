@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using AutiAssist_Mobile.Models;
+using AutiAssist_Mobile.Services;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Xamarin.Forms;
@@ -18,6 +19,7 @@ namespace AutiAssist_Mobile.ViewModels
         public AsyncCommand<Coffee> FavouriteCommand { get; }
         public AsyncCommand<object> SelectedCommand { get; }
         public AsyncCommand AddCommand { get; }
+        public AsyncCommand<Coffee> RemoveCommand { get; }
 
         Coffee selectedCoffee;
         bool initialLoad = false;
@@ -36,6 +38,8 @@ namespace AutiAssist_Mobile.ViewModels
             RefreshCommand = new AsyncCommand(Refresh);
             FavouriteCommand = new AsyncCommand<Coffee>(Favourite);
             SelectedCommand = new AsyncCommand<object>(Selected);
+            RemoveCommand = new AsyncCommand<Coffee>(RemoveCoffee);
+            AddCommand = new AsyncCommand(AddCoffee);
 
         }
 
@@ -51,9 +55,25 @@ namespace AutiAssist_Mobile.ViewModels
         {
             IsBusy = true;
 
-            await Task.Delay(2000);
+            Coffee.Clear();
+            var coffees = await CoffeeDataService.GetCoffee();
+            Coffee.AddRange(coffees);
 
             IsBusy = false;
+        }
+
+        async Task AddCoffee()
+        {
+            var name = await App.Current.MainPage.DisplayPromptAsync("Name", "Enter coffee name");
+            var roaster = await App.Current.MainPage.DisplayPromptAsync("Roaster", "Enter details");
+            await CoffeeDataService.AddCoffee(name, roaster);
+            await Refresh();
+        }
+
+        async Task RemoveCoffee(Coffee coffee)
+        {
+            await CoffeeDataService.RemoveCoffee(coffee.Id);
+            await Refresh();
         }
         async Task Selected(object args)
         {
@@ -90,30 +110,7 @@ namespace AutiAssist_Mobile.ViewModels
             {
                 InitialLoad = true;
 
-                await Task.Delay(4000);
-
-                var image = "https://www.yesplz.coffee/app/uploads/2020/11/emptybag-min.png";
-
-                Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Sip of Sunshine", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Potent Potable", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-                Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-
-                CoffeeGroups.Add(new Grouping<string, Coffee>("Blue Bottle", new[] { Coffee[2] }));
-                CoffeeGroups.Add(new Grouping<string, Coffee>("Yes Plz", new[] { Coffee[5] }));
+                await Refresh();
 
             }
             catch (Exception ex)
