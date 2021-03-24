@@ -153,6 +153,10 @@
         <ShellContent ContentTemplate="{DataTemplate local:CoffeePage}" Route="CoffeePage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Local Coffees">
+        <ShellContent ContentTemplate="{DataTemplate local:LocalDBCoffeePage}" Route="LocalDBCoffeePage" />
+    </FlyoutItem>
+
     <!--  When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
     <MenuItem
         Clicked="OnMenuItemClicked"

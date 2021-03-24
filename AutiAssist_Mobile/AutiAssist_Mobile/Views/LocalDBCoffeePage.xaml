@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutiAssist_Mobile.Views.LocalDBCoffeePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:model="clr-namespace:AutiAssist_Mobile.Models"
+    xmlns:viewmodel="clr-namespace:AutiAssist_Mobile.ViewModels"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="PageOfLocalDBCoffee"
+    Title="{Binding Title}"
+    x:DataType="viewmodel:LocalDBCoffeeViewModel">
+    <ContentPage.BindingContext>
+        <viewmodel:LocalDBCoffeeViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter" />
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddCommand}" Text="Add" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ListView
+                Grid.ColumnSpan="2"
+                BackgroundColor="Transparent"
+                CachingStrategy="RecycleElement"
+                HasUnevenRows="True"
+                IsPullToRefreshEnabled="True"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                ItemsSource="{Binding Coffee}"
+                RefreshCommand="{Binding RefreshCommand}"
+                RefreshControlColor="Green"
+                SelectedItem="{Binding SelectedCoffee, Mode=TwoWay}"
+                SeparatorColor="Transparent"
+                SeparatorVisibility="Default">
+                <ListView.Behaviors>
+                    <xct:EventToCommandBehavior
+                        Command="{Binding SelectedCommand}"
+                        EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"
+                        EventName="ItemSelected" />
+                </ListView.Behaviors>
+                <ListView.Header>
+                    <StackLayout Padding="20" IsVisible="{Binding IsNotInitialLoad}">
+                        <Label HorizontalOptions="Center" Text="HEADER" />
+                    </StackLayout>
+                </ListView.Header>
+                <ListView.Footer>
+                    <StackLayout Padding="20" IsVisible="{Binding IsNotInitialLoad}">
+                        <Label HorizontalOptions="Center" Text="FOOTER" />
+                    </StackLayout>
+                </ListView.Footer>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Coffee">
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem
+                                    Command="{Binding Source={x:Reference PageOfLocalDBCoffee}, Path=BindingContext.FavouriteCommand}"
+                                    CommandParameter="{Binding .}"
+                                    Text="Favourite" />
+                                <MenuItem Text="Delete" />
+                            </ViewCell.ContextActions>
+                            <Grid Padding="10">
+                                <Frame CornerRadius="20" HasShadow="True">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Image Source="{Binding Image}" WidthRequest="50" />
+                                        <StackLayout VerticalOptions="Center">
+                                            <Label
+                                                FontSize="Large"
+                                                Text="{Binding Name}"
+                                                VerticalOptions="Center" />
+                                            <Label
+                                                FontSize="Large"
+                                                Text="{Binding Roaster}"
+                                                VerticalOptions="Center" />
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ActivityIndicator
+                Grid.RowSpan="2"
+                Grid.ColumnSpan="2"
+                HorizontalOptions="FillAndExpand"
+                IsRunning="{Binding InitialLoad}"
+                IsVisible="{Binding InitialLoad}"
+                VerticalOptions="CenterAndExpand" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
