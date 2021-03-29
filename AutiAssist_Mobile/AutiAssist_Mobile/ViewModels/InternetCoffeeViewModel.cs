@@ -1,17 +1,17 @@
-﻿using System;
+﻿using AutiAssist_Mobile.Models;
+using AutiAssist_Mobile.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
-using AutiAssist_Mobile.Models;
-using AutiAssist_Mobile.Services;
+using Xamarin.Forms;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
-using Xamarin.Forms;
 
 namespace AutiAssist_Mobile.ViewModels
 {
-    class LocalDBCoffeeViewModel : BaseViewModel
+    class InternetCoffeeViewModel : BaseViewModel
     {
         public ObservableRangeCollection<Coffee> Coffee { get; set; }
         public ObservableRangeCollection<Grouping<string, Coffee>> CoffeeGroups { get; set; }
@@ -29,10 +29,9 @@ namespace AutiAssist_Mobile.ViewModels
             get => selectedCoffee;
             set => SetProperty(ref selectedCoffee, value);
         }
-
-        public LocalDBCoffeeViewModel()
+        public InternetCoffeeViewModel()
         {
-            Title = "SQLite Coffees";
+            Title = "Internet Coffees";
             Coffee = new ObservableRangeCollection<Coffee>();
             CoffeeGroups = new ObservableRangeCollection<Grouping<string, Coffee>>();
             RefreshCommand = new AsyncCommand(Refresh);
@@ -40,9 +39,7 @@ namespace AutiAssist_Mobile.ViewModels
             SelectedCommand = new AsyncCommand<object>(Selected);
             RemoveCommand = new AsyncCommand<Coffee>(RemoveCoffee);
             AddCommand = new AsyncCommand(AddCoffee);
-
         }
-
         public bool InitialLoad
         {
             get { return initialLoad; }
@@ -54,9 +51,9 @@ namespace AutiAssist_Mobile.ViewModels
         async Task Refresh()
         {
             IsBusy = true;
-            CoffeeDatabaseService coffeeDatabaseService = await CoffeeDatabaseService.Instance;
+
             Coffee.Clear();
-            var coffees = await coffeeDatabaseService.GetCoffee();
+            var coffees = await CoffeeInternetDataService.GetCoffee();
             Coffee.AddRange(coffees);
 
             IsBusy = false;
@@ -64,17 +61,15 @@ namespace AutiAssist_Mobile.ViewModels
 
         async Task AddCoffee()
         {
-            CoffeeDatabaseService coffeeDatabaseService = await CoffeeDatabaseService.Instance;
             var name = await App.Current.MainPage.DisplayPromptAsync("Name", "Enter coffee name");
             var roaster = await App.Current.MainPage.DisplayPromptAsync("Roaster", "Enter details");
-            await coffeeDatabaseService.AddCoffee(name, roaster);
+            await CoffeeInternetDataService.AddCoffee(name, roaster);
             await Refresh();
         }
 
         async Task RemoveCoffee(Coffee coffee)
         {
-            CoffeeDatabaseService coffeeDatabaseService = await CoffeeDatabaseService.Instance;
-            await coffeeDatabaseService.RemoveCoffee(coffee.Id);
+            await CoffeeInternetDataService.RemoveCoffee(coffee.Id);
             await Refresh();
         }
         async Task Selected(object args)
@@ -122,7 +117,6 @@ namespace AutiAssist_Mobile.ViewModels
             finally
             {
                 IsBusy = false;
-
             }
         }
     }
